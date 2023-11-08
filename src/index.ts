@@ -141,12 +141,24 @@ export default function configure(options?: ConfigureOptions & ConfigItem, ...us
 				},
 			],
 			'semi': ['error', 'always'],
+			'unicorn/template-indent': ['warn', {
+				indent: stylistic && typeof stylistic !== 'boolean' && typeof stylistic.indent === 'number'
+					? stylistic.indent
+					: '\t',
+				tags: [
+					'groq',
+					'gql',
+					'sql',
+					'html',
+					'styled',
+				],
+			}],
 			...rules,
 		},
 		stylistic: typeof stylistic === 'boolean'
 			? stylistic
 			: {
-				indent: 'tab',
+				indent: stylistic?.indent || 'tab',
 				...stylistic,
 			},
 		typescript,
