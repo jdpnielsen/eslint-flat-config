@@ -129,6 +129,17 @@ export default function configure(options?: ConfigureOptions & ConfigItem, ...us
 				'order': 'asc',
 				'type': 'natural',
 			}],
+			'perfectionist/sort-jsx-props': [
+				'error',
+				{
+					'custom-groups': {
+						ids: ['key', 'id'],
+					},
+					'groups': ['ids', 'multiline', 'unknown', 'shorthand'],
+					'order': 'asc',
+					'type': 'natural',
+				},
+			],
 			'semi': ['error', 'always'],
 			...rules,
 		},
