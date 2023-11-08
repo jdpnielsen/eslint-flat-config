@@ -58,12 +58,16 @@ export default function configure(options?: ConfigureOptions & ConfigItem, ...us
 		typescript: enableTypescript,
 	};
 
+	const indent = stylistic && typeof stylistic !== 'boolean'
+		? stylistic?.indent
+		: 'tab';
+
 	const tsConfigPaths = getTsConfigPaths(typescript);
 
 	const customStyleRules = {
 		'style/arrow-parens': ['error', 'always'],
 		'style/brace-style': ['error', '1tbs'],
-		'style/indent': ['error', 'tab'],
+		'style/indent': ['error', indent],
 		'style/jsx-curly-brace-presence': ['off'],
 		'style/jsx-one-expression-per-line': ['off'],
 		'style/member-delimiter-style': ['error', {
@@ -142,9 +146,9 @@ export default function configure(options?: ConfigureOptions & ConfigItem, ...us
 			],
 			'semi': ['error', 'always'],
 			'unicorn/template-indent': ['warn', {
-				indent: stylistic && typeof stylistic !== 'boolean' && typeof stylistic.indent === 'number'
-					? stylistic.indent
-					: '\t',
+				indent: indent === 'tab'
+					? '\t'
+					: indent,
 				tags: [
 					'groq',
 					'gql',
@@ -158,7 +162,7 @@ export default function configure(options?: ConfigureOptions & ConfigItem, ...us
 		stylistic: typeof stylistic === 'boolean'
 			? stylistic
 			: {
-				indent: stylistic?.indent || 'tab',
+				indent,
 				...stylistic,
 			},
 		typescript,
@@ -176,7 +180,7 @@ export default function configure(options?: ConfigureOptions & ConfigItem, ...us
 				},
 			},
 			{
-				files: [GLOB_JSX, GLOB_TSX],
+				files: [GLOB_JSX, typescript ? GLOB_TSX : ''].filter(Boolean),
 				languageOptions: {
 					parserOptions: {
 						ecmaFeatures: {

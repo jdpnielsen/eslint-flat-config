@@ -1,5 +1,5 @@
 // Define a TypeScript interface
-interface Person {
+export interface Person {
 	name: string; age: number;
 }
 

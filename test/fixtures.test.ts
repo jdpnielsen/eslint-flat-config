@@ -18,17 +18,19 @@ afterAll(async () => {
 runWithConfig('js', {
 	typescript: false,
 });
-runWithConfig('all', {
-	typescript: true,
-});
+runWithConfig('all', {});
 runWithConfig('no-style', {
-	typescript: true,
 	stylistic: false,
 });
 runWithConfig('double-quotes', {
-	typescript: true,
 	stylistic: {
 		quotes: 'double',
+	},
+});
+
+runWithConfig('space-indent', {
+	stylistic: {
+		indent: 2,
 	},
 });
 
