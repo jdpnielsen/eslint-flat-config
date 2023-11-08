@@ -1,9 +1,12 @@
+import type { ConfigItem, OptionsConfig, Rules } from '@antfu/eslint-config';
+
+import { GLOB_JSX, GLOB_TSX, antfu } from '@antfu/eslint-config';
 import nextPlugin from '@next/eslint-plugin-next';
 import pluginReact from 'eslint-plugin-react';
 import pluginReactHooks from 'eslint-plugin-react-hooks';
-import type { ConfigItem, OptionsConfig, Rules } from '@antfu/eslint-config';
-import { GLOB_JSX, GLOB_TSX, antfu } from '@antfu/eslint-config';
 import { isPackageExists } from 'local-pkg';
+
+import { getTsConfigPaths } from './utils';
 
 const reactPackages = [
 	'react',
@@ -54,6 +57,8 @@ export default function configure(options?: ConfigureOptions & ConfigItem, ...us
 		},
 		typescript: enableTypescript,
 	};
+
+	const tsConfigPaths = getTsConfigPaths(typescript);
 
 	const customStyleRules = {
 		'style/arrow-parens': ['error', 'always'],
@@ -106,6 +111,24 @@ export default function configure(options?: ConfigureOptions & ConfigItem, ...us
 			...(typescript ? typescriptRules : {}),
 			'antfu/consistent-list-newline': ['off'],
 			'curly': ['error', 'all'],
+			'perfectionist/sort-imports': ['error', {
+				'groups': [
+					'builtin',
+					'type',
+					['external'],
+					['internal-type', 'internal'],
+					['parent-type', 'sibling-type', 'index-type'],
+					['parent', 'sibling', 'index'],
+					'side-effect',
+					'style',
+					'object',
+					'unknown',
+				],
+				'internal-pattern': tsConfigPaths,
+				'newlines-between': 'always',
+				'order': 'asc',
+				'type': 'natural',
+			}],
 			'semi': ['error', 'always'],
 			...rules,
 		},

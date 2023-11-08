@@ -1,5 +1,6 @@
 // @ts-check
 import styleMigrate from '@stylistic/eslint-plugin-migrate';
+
 import configure from './dist/index.js';
 
 export default configure(
