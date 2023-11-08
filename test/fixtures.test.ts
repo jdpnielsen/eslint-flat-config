@@ -1,10 +1,12 @@
 import { join, resolve } from 'node:path';
-import { afterAll, beforeAll, it } from 'vitest';
-import fs from 'fs-extra';
-import { execa } from 'execa';
-import fg from 'fast-glob';
+
 import type { ConfigItem } from '@antfu/eslint-config';
 import type { ConfigureOptions } from '@jdpnielsen/eslint-flat-config';
+
+import { execa } from 'execa';
+import fg from 'fast-glob';
+import fs from 'fs-extra';
+import { afterAll, beforeAll, it } from 'vitest';
 
 beforeAll(async () => {
 	await fs.rm('_fixtures', { recursive: true, force: true });
