@@ -12,7 +12,7 @@ const people: Person[] = [
 ];
 
 // eslint-disable-next-line no-console
-const log = console.log
+const log = console.log;
 
 // Use a for...of loop to iterate over the array
 for (const person of people) {
@@ -73,7 +73,7 @@ const dog = new Dog('Buddy');
 dog.bark();
 
 const fn = (): string => {
-  return `hello${  1}`
-}
+  return `hello${  1}`;
+};
 
-log(car1, car2, favoriteFruit, numericValue, fn())
+log(car1, car2, favoriteFruit, numericValue, fn());

@@ -1,10 +1,8 @@
-# @antfu/eslint-config
+# @jdpnielsen/eslint-flat-config
 
-[![npm](https://img.shields.io/npm/v/@antfu/eslint-config?color=444&label=)](https://npmjs.com/package/@antfu/eslint-config) [![code style](https://antfu.me/badge-code-style.svg)](https://github.com/antfu/eslint-config)
-
-- Single quotes, no semi
+- Single quotes, semi & tab indentation
 - Auto fix for formatting (aimed to be used standalone **without** Prettier)
-- Designed to work with TypeScript, JSX, Vue out-of-box
+- Designed to work with TypeScript, React JSX & next.js out-of-box
 - Lints also for json, yaml, markdown
 - Sorted imports, dangling commas
 - Reasonable defaults, best practices, only one-line of config
@@ -13,15 +11,12 @@
 - Using [ESLint Stylistic](https://github.com/eslint-stylistic/eslint-stylistic)
 - **Style principle**: Minimal for reading, stable for diff, consistent
 
-> [!IMPORTANT]
-> Since v1.0.0, this config is rewritten to the new [ESLint Flat config](https://eslint.org/docs/latest/use/configure/configuration-files-new), check the [release note](https://github.com/antfu/eslint-config/releases/tag/v1.0.0) for more details.
-
 ## Usage
 
 ### Install
 
 ```bash
-pnpm i -D eslint @antfu/eslint-config
+pnpm i -D eslint @jdpnielsen/eslint-flat-config
 ```
 
 ### Create config file
@@ -30,18 +25,18 @@ With [`"type": "module"`](https://nodejs.org/api/packages.html#type) in `package
 
 ```js
 // eslint.config.js
-import antfu from '@antfu/eslint-config'
+import setupConfig from '@jdpnielsen/eslint-flat-config';
 
-export default antfu()
+export default setupConfig();
 ```
 
 With CJS:
 
 ```js
 // eslint.config.js
-const antfu = require('@antfu/eslint-config').default
+const setupConfig = require('@jdpnielsen/eslint-flat-config').default;
 
-module.exports = antfu()
+module.exports = setupConfig();
 ```
 
 > Note that `.eslintignore` no longer works in Flat config, see [customization](#customization) for more details.
@@ -52,10 +47,10 @@ For example:
 
 ```json
 {
-  "scripts": {
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
-  }
+	"scripts": {
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
+	}
 }
 ```
 
@@ -67,45 +62,45 @@ Add the following settings to your `.vscode/settings.json`:
 
 ```jsonc
 {
-  // Enable the ESlint flat config support
-  "eslint.experimental.useFlatConfig": true,
+	// Enable the ESlint flat config support
+	"eslint.experimental.useFlatConfig": true,
 
-  // Disable the default formatter, use eslint instead
-  "prettier.enable": false,
-  "editor.formatOnSave": false,
+	// Disable the default formatter, use eslint instead
+	"prettier.enable": false,
+	"editor.formatOnSave": false,
 
-  // Auto fix
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "never"
-  },
+	// Auto fix
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "explicit",
+		"source.organizeImports": "never"
+	},
 
-  // Silent the stylistic rules in you IDE, but still auto fix them
-  "eslint.rules.customizations": [
-    { "rule": "style/*", "severity": "off" },
-    { "rule": "*-indent", "severity": "off" },
-    { "rule": "*-spacing", "severity": "off" },
-    { "rule": "*-spaces", "severity": "off" },
-    { "rule": "*-order", "severity": "off" },
-    { "rule": "*-dangle", "severity": "off" },
-    { "rule": "*-newline", "severity": "off" },
-    { "rule": "*quotes", "severity": "off" },
-    { "rule": "*semi", "severity": "off" }
-  ],
+	// Silent the stylistic rules in you IDE, but still auto fix them
+	"eslint.rules.customizations": [
+		{ "rule": "style/*", "severity": "off" },
+		{ "rule": "*-indent", "severity": "off" },
+		{ "rule": "*-spacing", "severity": "off" },
+		{ "rule": "*-spaces", "severity": "off" },
+		{ "rule": "*-order", "severity": "off" },
+		{ "rule": "*-dangle", "severity": "off" },
+		{ "rule": "*-newline", "severity": "off" },
+		{ "rule": "*quotes", "severity": "off" },
+		{ "rule": "*semi", "severity": "off" }
+	],
 
-  // Enable eslint for all supported languages
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-    "vue",
-    "html",
-    "markdown",
-    "json",
-    "jsonc",
-    "yaml"
-  ]
+	// Enable eslint for all supported languages
+	"eslint.validate": [
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"typescriptreact",
+		"vue",
+		"html",
+		"markdown",
+		"json",
+		"jsonc",
+		"yaml"
+	]
 }
 ```
 
@@ -113,119 +108,73 @@ Add the following settings to your `.vscode/settings.json`:
 
 Since v1.0, we migrated to [ESLint Flat config](https://eslint.org/docs/latest/use/configure/configuration-files-new). It provides much better organization and composition.
 
-Normally you only need to import the `antfu` preset:
+Normally you only need to import the preset:
 
 ```js
 // eslint.config.js
-import antfu from '@antfu/eslint-config'
+import setupConfig from '@jdpnielsen/eslint-flat-config';
 
-export default antfu()
+export default setupConfig();
 ```
 
 And that's it! Or you can configure each integration individually, for example:
 
 ```js
 // eslint.config.js
-import antfu from '@antfu/eslint-config'
+import setupConfig from '@jdpnielsen/eslint-flat-config';
 
-export default antfu({
-  // Enable stylistic formatting rules
-  // stylistic: true,
+export default setupConfig({
+	// Enable stylistic formatting rules
+	// stylistic: true,
 
-  // Or customize the stylistic rules
-  stylistic: {
-    indent: 2, // 4, or 'tab'
-    quotes: 'single', // or 'double'
-  },
+	// Or customize the stylistic rules
+	stylistic: {
+		indent: 2, // 4, or 'tab'
+		quotes: 'single', // or 'double'
+	},
 
-  // TypeScript and Vue are auto-detected, you can also explicitly enable them:
-  typescript: true,
-  vue: true,
+	// TypeScript, React, Nextjs and Vue are auto-detected, you can also explicitly enable them:
+	typescript: true,
+	react: true,
+	next: true,
+	vue: true,
 
-  // Disable jsonc and yaml support
-  jsonc: false,
-  yaml: false,
+	// Disable jsonc and yaml support
+	jsonc: false,
+	yaml: false,
 
-  // `.eslintignore` is no longer supported in Flat config, use `ignores` instead
-  ignores: [
-    './fixtures',
-    // ...globs
-  ]
-})
+	// `.eslintignore` is no longer supported in Flat config, use `ignores` instead
+	ignores: [
+		'./fixtures',
+		// ...globs
+	]
+});
 ```
 
-The `antfu` factory function also accepts any number of arbitrary custom config overrides:
+The `setupConfig` factory function also accepts any number of arbitrary custom config overrides:
 
 ```js
 // eslint.config.js
-import antfu from '@antfu/eslint-config'
+import setupConfig from '@jdpnielsen/eslint-flat-config';
 
-export default antfu(
-  {
-    // Configures for antfu's config
-  },
+export default setupConfig(
+	{
+		// Configures for factory function
+	},
 
-  // From the second arguments they are ESLint Flat Configs
-  // you can have multiple configs
-  {
-    files: ['**/*.ts'],
-    rules: {},
-  },
-  {
-    rules: {},
-  },
-)
+	// From the second arguments they are ESLint Flat Configs
+	// you can have multiple configs
+	{
+		files: ['**/*.ts'],
+		rules: {},
+	},
+	{
+		rules: {},
+	},
+);
 ```
 
-Going more advanced, you can also import fine-grained configs and compose them as you wish:
-
-<details>
-<summary>Advanced Example</summary>
-
-We don't recommend using this style in general usages, as there are shared options between configs and might need extra care to make them consistent.
-
-```js
-// eslint.config.js
-import {
-  comments,
-  ignores,
-  imports,
-  javascript,
-  jsdoc,
-  jsonc,
-  markdown,
-  node,
-  sortPackageJson,
-  sortTsconfig,
-  stylistic,
-  typescript,
-  unicorn,
-  vue,
-  yaml,
-} from '@antfu/eslint-config'
-
-export default [
-  ...ignores(),
-  ...javascript(/* Options */),
-  ...comments(),
-  ...node(),
-  ...jsdoc(),
-  ...imports(),
-  ...unicorn(),
-  ...typescript(/* Options */),
-  ...stylistic(),
-  ...vue(),
-  ...jsonc(),
-  ...yaml(),
-  ...markdown(),
-]
-```
-
-</details>
-
-Check out the [configs](https://github.com/antfu/eslint-config/blob/main/src/configs) and [factory](https://github.com/antfu/eslint-config/blob/main/src/factory.ts) for more details.
-
-> Thanks to [sxzz/eslint-config](https://github.com/sxzz/eslint-config) for the inspiration and reference.
+> Thanks to [antfu/eslint-config](https://github.com/antfu/eslint-config) for the inspiration and reference.
 
 ### Plugins Renaming
 
@@ -255,44 +204,44 @@ Certain rules would only be enabled in specific files, for example, `ts/*` rules
 
 ```js
 // eslint.config.js
-import antfu from '@antfu/eslint-config'
+import setupConfig from '@jdpnielsen/eslint-flat-config';
 
-export default antfu(
-  { vue: true, typescript: true },
-  {
-    // Remember to specify the file glob here, otherwise it might cause the vue plugin to handle non-vue files
-    files: ['**/*.vue'],
-    rules: {
-      'vue/operator-linebreak': ['error', 'before'],
-    },
-  },
-  {
-    // Without `files`, they are general rules for all files
-    rules: {
-      'style/semi': ['error', 'never'],
-    },
-  }
-)
+export default setupConfig(
+	{ vue: true, typescript: true },
+	{
+		// Remember to specify the file glob here, otherwise it might cause the vue plugin to handle non-vue files
+		files: ['**/*.vue'],
+		rules: {
+			'vue/operator-linebreak': ['error', 'before'],
+		},
+	},
+	{
+		// Without `files`, they are general rules for all files
+		rules: {
+			'style/semi': ['error', 'never'],
+		},
+	}
+);
 ```
 
 We also provided an `overrides` options to make it easier:
 
 ```js
 // eslint.config.js
-import antfu from '@antfu/eslint-config'
+import setupConfig from '@jdpnielsen/eslint-flat-config';
 
-export default antfu({
-  overrides: {
-    vue: {
-      'vue/operator-linebreak': ['error', 'before'],
-    },
-    typescript: {
-      'ts/consistent-type-definitions': ['error', 'interface'],
-    },
-    yaml: {},
-    // ...
-  }
-})
+export default setupConfig({
+	overrides: {
+		vue: {
+			'vue/operator-linebreak': ['error', 'before'],
+		},
+		typescript: {
+			'ts/consistent-type-definitions': ['error', 'interface'],
+		},
+		yaml: {},
+		// ...
+	}
+});
 ```
 
 ### Optional Rules
@@ -310,10 +259,10 @@ It's recommended to opt-in on each file individually using [configuration commen
 ```js
 /* eslint perfectionist/sort-objects: "error" */
 const objectWantedToSort = {
-  a: 2,
-  b: 1,
-  c: 3,
-}
+	a: 2,
+	b: 1,
+	c: 3,
+};
 /* eslint perfectionist/sort-objects: "off" */
 ```
 
@@ -323,13 +272,13 @@ You can optionally enable the [type aware rules](https://typescript-eslint.io/li
 
 ```js
 // eslint.config.js
-import antfu from '@antfu/eslint-config'
+import setupConfig from '@jdpnielsen/eslint-flat-config';
 
-export default antfu({
-  typescript: {
-    tsconfigPath: 'tsconfig.json',
-  },
-})
+export default setupConfig({
+	typescript: {
+		tsconfigPath: 'tsconfig.json',
+	},
+});
 ```
 
 ### Lint Staged
@@ -338,12 +287,12 @@ If you want to apply lint and auto-fix before every commit, you can add the foll
 
 ```json
 {
-  "simple-git-hooks": {
-    "pre-commit": "pnpm lint-staged"
-  },
-  "lint-staged": {
-    "*": "eslint --fix"
-  }
+	"simple-git-hooks": {
+		"pre-commit": "pnpm lint-staged"
+	},
+	"lint-staged": {
+		"*": "eslint --fix"
+	}
 }
 ```
 
@@ -370,37 +319,6 @@ This project follows [Semantic Versioning](https://semver.org/) for releases. Ho
 - Rules options changes
 - Version bumps of dependencies
 
-## Badge
-
-If you enjoy this code style, and would like to mention it in your project, here is the badge you can use:
-
-```md
-[![code style](https://antfu.me/badge-code-style.svg)](https://github.com/antfu/eslint-config)
-```
-
-[![code style](https://antfu.me/badge-code-style.svg)](https://github.com/antfu/eslint-config)
-
-## FAQ
-
-### Prettier?
-
-[Why I don't use Prettier](https://antfu.me/posts/why-not-prettier)
-
-### How to lint CSS?
-
-This config does NOT lint CSS. I personally use [UnoCSS](https://github.com/unocss/unocss) so I don't write CSS. If you still prefer CSS, you can use [stylelint](https://stylelint.io/) for CSS linting.
-
-### I prefer XXX...
-
-Sure, you can config and override rules locally in your project to fit your needs. If that still does not work for you, you can always fork this repo and maintain your own.
-
-## Check Also
-
-- [antfu/dotfiles](https://github.com/antfu/dotfiles) - My dotfiles
-- [antfu/vscode-settings](https://github.com/antfu/vscode-settings) - My VS Code settings
-- [antfu/ts-starter](https://github.com/antfu/ts-starter) - My starter template for TypeScript library
-- [antfu/vitesse](https://github.com/antfu/vitesse) - My starter template for Vue & Vite app
-
 ## License
 
-[MIT](./LICENSE) License &copy; 2019-PRESENT [Anthony Fu](https://github.com/antfu)
+[MIT](./LICENSE) License &copy; 2023 [Joshua Nielsen](https://github.com/jdpnielsen)
