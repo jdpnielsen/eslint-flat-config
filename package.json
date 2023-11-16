@@ -1,7 +1,7 @@
 {
 	"name": "@jdpnielsen/eslint-flat-config",
 	"type": "module",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"packageManager": "pnpm@8.10.2",
 	"description": "Joshuas's ESLint config",
 	"author": "Joshuas Nielsen <jdpnielsen@gmail.com> (https://github.com/jdpnielsen/)",
