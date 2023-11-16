@@ -59,7 +59,9 @@ export default function configure(options?: ConfigureOptions & ConfigItem, ...us
 	};
 
 	const indent = stylistic && typeof stylistic !== 'boolean'
-		? stylistic?.indent
+		? typeof stylistic?.indent === 'number'
+			? stylistic.indent
+			: 'tab'
 		: 'tab';
 
 	const tsConfigPaths = getTsConfigPaths(typescript);
