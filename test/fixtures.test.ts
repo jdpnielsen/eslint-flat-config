@@ -1,6 +1,6 @@
 import { join, resolve } from 'node:path';
 
-import type { ConfigItem } from '@antfu/eslint-config';
+import type { FlatConfigItem } from '@antfu/eslint-config';
 import type { ConfigureOptions } from '@jdpnielsen/eslint-flat-config';
 
 import { execa } from 'execa';
@@ -48,7 +48,7 @@ runWithConfig(
 	},
 );
 
-function runWithConfig(name: string, configs: ConfigureOptions, ...items: ConfigItem[]) {
+function runWithConfig(name: string, configs: ConfigureOptions, ...items: FlatConfigItem[]) {
 	it.concurrent(name, async ({ expect }) => {
 		const from = resolve('fixtures/input');
 		const output = resolve('fixtures/output', name);

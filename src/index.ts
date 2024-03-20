@@ -1,4 +1,4 @@
-import type { ConfigItem, OptionsConfig, Rules } from '@antfu/eslint-config';
+import type { FlatConfigItem, OptionsConfig, Rules, UserConfigItem } from '@antfu/eslint-config';
 
 import { GLOB_JSX, GLOB_TSX, antfu } from '@antfu/eslint-config';
 import nextPlugin from '@next/eslint-plugin-next';
@@ -32,7 +32,7 @@ export type ConfigureOptions = OptionsConfig & {
 	next?: boolean;
 };
 
-export default function configure(options?: ConfigureOptions & ConfigItem, ...userConfigs: (ConfigItem | ConfigItem[])[]): ConfigItem[] {
+export default function configure(options?: ConfigureOptions & FlatConfigItem, ...userConfigs: (UserConfigItem | UserConfigItem[])[]): Promise<UserConfigItem[]> {
 	const enableReact = reactPackages.some((i) => isPackageExists(i));
 	const enableNext = nextPackages.some((i) => isPackageExists(i));
 	const enableTypescript = isPackageExists('typescript');
