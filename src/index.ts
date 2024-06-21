@@ -1,9 +1,10 @@
-import type { FlatConfigItem, OptionsConfig, Rules, UserConfigItem } from '@antfu/eslint-config';
+import type { ConfigNames, OptionsConfig, OptionsOverrides, Rules, TypedFlatConfigItem } from '@antfu/eslint-config';
+import type { FlatConfigComposer } from 'eslint-flat-config-utils';
 
-import { GLOB_JSX, GLOB_TSX, antfu } from '@antfu/eslint-config';
+import { antfu } from '@antfu/eslint-config';
 import nextPlugin from '@next/eslint-plugin-next';
-import pluginReact from 'eslint-plugin-react';
 import pluginReactHooks from 'eslint-plugin-react-hooks';
+import pluginReactRefresh from 'eslint-plugin-react-refresh';
 import { isPackageExists } from 'local-pkg';
 
 import { getTsConfigPaths } from './utils';
@@ -19,12 +20,6 @@ const nextPackages = [
 
 export type ConfigureOptions = OptionsConfig & {
 	/**
-	 * Enable react rules.
-	 *
-	 * @default true
-	 */
-	react?: boolean;
-	/**
 	 * Enable next rules.
 	 *
 	 * @default true
@@ -32,7 +27,7 @@ export type ConfigureOptions = OptionsConfig & {
 	next?: boolean;
 };
 
-export default function configure(options?: ConfigureOptions & FlatConfigItem, ...userConfigs: (UserConfigItem | UserConfigItem[])[]): Promise<UserConfigItem[]> {
+export default function configure(options?: ConfigureOptions & TypedFlatConfigItem, ...userConfigs: (TypedFlatConfigItem | TypedFlatConfigItem[])[]): FlatConfigComposer<TypedFlatConfigItem, ConfigNames> {
 	const enableReact = reactPackages.some((i) => isPackageExists(i));
 	const enableNext = nextPackages.some((i) => isPackageExists(i));
 	const enableTypescript = isPackageExists('typescript');
@@ -42,19 +37,13 @@ export default function configure(options?: ConfigureOptions & FlatConfigItem, .
 		plugins = {},
 		react = enableReact,
 		rules = {},
-		stylistic = {
-			indent: 'tab',
-			quotes: 'single',
-		},
+		stylistic = true,
 		typescript = enableTypescript,
 		...remainingOptions
 	} = options || {
 		next: enableNext,
 		react: enableReact,
-		stylistic: {
-			indent: 'tab',
-			quotes: 'single',
-		},
+		stylistic: true,
 		typescript: enableTypescript,
 	};
 
@@ -69,21 +58,8 @@ export default function configure(options?: ConfigureOptions & FlatConfigItem, .
 	const customStyleRules = {
 		'style/arrow-parens': ['error', 'always'],
 		'style/brace-style': ['error', '1tbs'],
-		'style/indent': ['error', indent],
 		'style/jsx-curly-brace-presence': ['off'],
-		'style/jsx-one-expression-per-line': ['off'],
-		'style/member-delimiter-style': ['error', {
-			multiline: {
-				delimiter: 'semi',
-				requireLast: true,
-			},
-			multilineDetection: 'brackets',
-			singleline: {
-				delimiter: 'semi',
-				requireLast: false,
-			},
-		}],
-		'style/semi': ['error', 'always'],
+		'style/jsx-one-expression-per-line': ['warn', { allow: 'single-line' }],
 	} satisfies Partial<Rules>;
 
 	const typescriptRules = {
@@ -92,31 +68,58 @@ export default function configure(options?: ConfigureOptions & FlatConfigItem, .
 		}],
 		'ts/consistent-type-definitions': ['off'],
 		'ts/no-explicit-any': ['warn'],
-		'ts/semi': ['error', 'always'],
+	} satisfies Partial<Rules>;
+
+	const customReactRules = {
+		'react-refresh/only-export-components': [
+			'warn',
+			{
+				allowConstantExport: false,
+				allowExportNames: [
+					...(enableNext
+						? [
+								'config',
+								'dynamic',
+								'generateStaticParams',
+								'metadata',
+								'generateMetadata',
+								'viewport',
+								'generateViewport',
+							]
+						: []),
+				],
+			},
+		],
+		'react/prefer-destructuring-assignment': ['off'],
 	} satisfies Partial<Rules>;
 
 	return antfu({
 		plugins: {
 			...(next
 				? {
-					'@next/next': nextPlugin,
-				}
+						'@next/next': nextPlugin,
+					}
 				: {}),
+			...react
+				? {
+						// 'react': pluginReact,
+						'react-hooks': pluginReactHooks,
+						// 'react-refresh': pluginReactRefresh,
+					}
+				: {},
 			...plugins,
 		},
+		react: extendOptions({ overrides: customReactRules }, react),
 		rules: {
-			// ...(react ? reactPlugin.configs.recommended.rules : {}),
 			...(next ? nextPlugin.configs.recommended.rules : {}),
 			...(next ? nextPlugin.configs['core-web-vitals'].rules : {}),
 			...(next
 				? {
-					'@next/next/no-img-element': 'error',
-				}
+						'@next/next/no-img-element': 'error',
+						'node/prefer-global/buffer': ['error', 'always'],
+						'node/prefer-global/process': ['error', 'always'],
+					}
 				: {}),
-			...(stylistic ? customStyleRules : {}),
-			...(typescript ? typescriptRules : {}),
-			'antfu/consistent-list-newline': ['off'],
-			'curly': ['error', 'all'],
 			'perfectionist/sort-imports': ['error', {
 				'groups': [
 					'builtin',
@@ -146,7 +149,6 @@ export default function configure(options?: ConfigureOptions & FlatConfigItem, .
 					'type': 'natural',
 				},
 			],
-			'semi': ['error', 'always'],
 			'unicorn/template-indent': ['warn', {
 				indent: indent === 'tab'
 					? '\t'
@@ -161,50 +163,26 @@ export default function configure(options?: ConfigureOptions & FlatConfigItem, .
 			}],
 			...rules,
 		},
-		stylistic: typeof stylistic === 'boolean'
-			? stylistic
-			: {
-				indent,
-				...stylistic,
-			},
-		typescript,
+		stylistic: extendOptions({ indent: 'tab', overrides: customStyleRules, quotes: 'single', semi: true }, stylistic),
+		typescript: extendOptions({ overrides: typescriptRules }, typescript),
 		vue: false,
 		...remainingOptions,
-	},
-	...userConfigs,
-	...(react
-		? [
-			{
-				name: 'antfu:react:setup',
-				plugins: {
-					'react': pluginReact,
-					'react-hooks': pluginReactHooks,
-				},
-			},
-			{
-				files: [GLOB_JSX, typescript ? GLOB_TSX : ''].filter(Boolean),
-				languageOptions: {
-					parserOptions: {
-						ecmaFeatures: {
-							jsx: true,
-						},
-					},
-				},
-				name: 'antfu:react:rules',
-				rules: {
-					...pluginReact.configs.recommended.rules,
-					...pluginReactHooks.configs.recommended.rules,
+	})
+		.append(
+			...userConfigs,
+		);
+}
 
-					'react/prop-types': 'off',
-					'react/react-in-jsx-scope': 'off',
-				},
-				settings: {
-					react: {
-						version: 'detect',
-					},
-				},
-			},
-		]
-		: []),
-	);
+function extendOptions<T extends OptionsOverrides>(defaultOptions: T, input: boolean | T | undefined): T | false {
+	if (typeof input === 'boolean') {
+		return input ? defaultOptions : false;
+	}
+
+	return {
+		...defaultOptions,
+		overrides: {
+			...defaultOptions.overrides,
+			...input?.overrides,
+		},
+	};
 }
