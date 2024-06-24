@@ -1,4 +1,4 @@
-# @jdpnielsen/eslint-flat-config
+# @noaignite-dk/eslint-flat-config
 
 - Single quotes, semi & tab indentation
 - Auto fix for formatting (aimed to be used standalone **without** Prettier)
@@ -16,7 +16,7 @@
 ### Install
 
 ```bash
-pnpm i -D eslint @jdpnielsen/eslint-flat-config
+pnpm i -D eslint @noaignite-dk/eslint-flat-config
 ```
 
 ### Create config file
@@ -25,7 +25,7 @@ With [`"type": "module"`](https://nodejs.org/api/packages.html#type) in `package
 
 ```js
 // eslint.config.js
-import setupConfig from '@jdpnielsen/eslint-flat-config';
+import setupConfig from '@noaignite-dk/eslint-flat-config';
 
 export default setupConfig();
 ```
@@ -34,7 +34,7 @@ With CJS:
 
 ```js
 // eslint.config.js
-const setupConfig = require('@jdpnielsen/eslint-flat-config').default;
+const setupConfig = require('@noaignite-dk/eslint-flat-config').default;
 
 module.exports = setupConfig();
 ```
@@ -112,7 +112,7 @@ Normally you only need to import the preset:
 
 ```js
 // eslint.config.js
-import setupConfig from '@jdpnielsen/eslint-flat-config';
+import setupConfig from '@noaignite-dk/eslint-flat-config';
 
 export default setupConfig();
 ```
@@ -121,7 +121,7 @@ And that's it! Or you can configure each integration individually, for example:
 
 ```js
 // eslint.config.js
-import setupConfig from '@jdpnielsen/eslint-flat-config';
+import setupConfig from '@noaignite-dk/eslint-flat-config';
 
 export default setupConfig({
 	// Enable stylistic formatting rules
@@ -155,7 +155,7 @@ The `setupConfig` factory function also accepts any number of arbitrary custom c
 
 ```js
 // eslint.config.js
-import setupConfig from '@jdpnielsen/eslint-flat-config';
+import setupConfig from '@noaignite-dk/eslint-flat-config';
 
 export default setupConfig(
 	{
@@ -204,7 +204,7 @@ Certain rules would only be enabled in specific files, for example, `ts/*` rules
 
 ```js
 // eslint.config.js
-import setupConfig from '@jdpnielsen/eslint-flat-config';
+import setupConfig from '@noaignite-dk/eslint-flat-config';
 
 export default setupConfig(
 	{ vue: true, typescript: true },
@@ -228,7 +228,7 @@ We also provided an `overrides` options to make it easier:
 
 ```js
 // eslint.config.js
-import setupConfig from '@jdpnielsen/eslint-flat-config';
+import setupConfig from '@noaignite-dk/eslint-flat-config';
 
 export default setupConfig({
 	overrides: {
@@ -271,7 +271,7 @@ You can optionally enable the [type aware rules](https://typescript-eslint.io/li
 
 ```js
 // eslint.config.js
-import setupConfig from '@jdpnielsen/eslint-flat-config';
+import setupConfig from '@noaignite-dk/eslint-flat-config';
 
 export default setupConfig({
 	typescript: {

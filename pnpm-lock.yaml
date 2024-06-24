@@ -44,7 +44,7 @@ importers:
       '@antfu/ni':
         specifier: ^0.21.12
         version: 0.21.12
-      '@jdpnielsen/eslint-flat-config':
+      '@noaignite-dk/eslint-flat-config':
         specifier: workspace:*
         version: 'link:'
       '@stylistic/eslint-plugin-migrate':
