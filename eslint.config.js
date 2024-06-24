@@ -1,7 +1,12 @@
-// @ts-check
 import styleMigrate from '@stylistic/eslint-plugin-migrate';
+import JITI from 'jiti';
 
-import configure from './dist/index.js';
+const jiti = JITI(import.meta.url);
+
+/**
+ * @type {import('./src').default}
+ */
+const configure = jiti('./src').default;
 
 export default configure(
 	{

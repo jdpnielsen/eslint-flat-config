@@ -1,0 +1,42 @@
+diff --git a/dist/index.cjs b/dist/index.cjs
+index a4e49e07760bae0b509dfe85e0737d210180098f..75fd510e877d3a766985fe230136ff1db07d15fa 100644
+--- a/dist/index.cjs
++++ b/dist/index.cjs
+@@ -1208,11 +1208,11 @@ async function react(options = {}) {
+     files = [GLOB_JS, GLOB_JSX, GLOB_TS, GLOB_TSX],
+     overrides = {}
+   } = options;
+-  await ensurePackages([
+-    "@eslint-react/eslint-plugin",
+-    "eslint-plugin-react-hooks",
+-    "eslint-plugin-react-refresh"
+-  ]);
++  // await ensurePackages([
++  //   "@eslint-react/eslint-plugin",
++  //   "eslint-plugin-react-hooks",
++  //   "eslint-plugin-react-refresh"
++  // ]);
+   const tsconfigPath = options?.tsconfigPath ? toArray(options.tsconfigPath) : void 0;
+   const isTypeAware = !!tsconfigPath;
+   const [
+diff --git a/dist/index.js b/dist/index.js
+index 252828952523bf7b2e9e9cd6e5e8ff1209833ad4..f7aa2af3dbd0dee58e94cc443e48f62990bdce4a 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -1104,11 +1104,11 @@ async function react(options = {}) {
+     files = [GLOB_JS, GLOB_JSX, GLOB_TS, GLOB_TSX],
+     overrides = {}
+   } = options;
+-  await ensurePackages([
+-    "@eslint-react/eslint-plugin",
+-    "eslint-plugin-react-hooks",
+-    "eslint-plugin-react-refresh"
+-  ]);
++  // await ensurePackages([
++  //   "@eslint-react/eslint-plugin",
++  //   "eslint-plugin-react-hooks",
++  //   "eslint-plugin-react-refresh"
++  // ]);
+   const tsconfigPath = options?.tsconfigPath ? toArray(options.tsconfigPath) : void 0;
+   const isTypeAware = !!tsconfigPath;
+   const [

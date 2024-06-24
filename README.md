@@ -252,7 +252,7 @@ This config also provides some optional plugins/rules for extended usages.
 
 This plugin [`eslint-plugin-perfectionist`](https://github.com/azat-io/eslint-plugin-perfectionist) allows you to sorted object keys, imports, etc, with auto-fix.
 
-The plugin is installed but no rules are enabled by default. 
+The plugin is installed but no rules are enabled by default.
 
 It's recommended to opt-in on each file individually using [configuration comments](https://eslint.org/docs/latest/use/configure/rules#using-configuration-comments-1).
 
@@ -263,7 +263,6 @@ const objectWantedToSort = {
 	b: 1,
 	c: 3,
 };
-/* eslint perfectionist/sort-objects: "off" */
 ```
 
 ### Type Aware Rules

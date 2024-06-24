@@ -1,7 +1,6 @@
 import { join, resolve } from 'node:path';
 
-import type { FlatConfigItem } from '@antfu/eslint-config';
-import type { ConfigureOptions } from '@jdpnielsen/eslint-flat-config';
+import type { OptionsConfig, TypedFlatConfigItem } from '@antfu/eslint-config';
 
 import { execa } from 'execa';
 import fg from 'fast-glob';
@@ -17,6 +16,8 @@ afterAll(async () => {
 
 runWithConfig('js', {
 	typescript: false,
+	react: false,
+	jsx: false,
 });
 runWithConfig('all', {});
 runWithConfig('no-style', {
@@ -48,7 +49,7 @@ runWithConfig(
 	},
 );
 
-function runWithConfig(name: string, configs: ConfigureOptions, ...items: FlatConfigItem[]) {
+function runWithConfig(name: string, configs: OptionsConfig, ...items: TypedFlatConfigItem[]) {
 	it.concurrent(name, async ({ expect }) => {
 		const from = resolve('fixtures/input');
 		const output = resolve('fixtures/output', name);
@@ -83,11 +84,14 @@ export default configure(
 		});
 
 		await Promise.all(files.map(async (file) => {
-			let content = await fs.readFile(join(target, file), 'utf-8');
+			const content = await fs.readFile(join(target, file), 'utf-8');
 			const source = await fs.readFile(join(from, file), 'utf-8');
+			const outputPath = join(output, file);
 			if (content === source) {
-				content = '// unchanged\n';
-			};
+				if (fs.existsSync(outputPath))
+					fs.remove(outputPath);
+				return;
+			}
 			await expect.soft(content).toMatchFileSnapshot(join(output, file));
 		}));
 	}, 30_000);
